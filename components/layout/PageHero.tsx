@@ -17,7 +17,7 @@ export function PageHero({
   crumb?: string;
 }) {
   return (
-    <section className="relative isolate overflow-hidden bg-navy-950 pt-[68px] lg:pt-[76px]">
+    <section className="relative isolate overflow-hidden bg-navy-950 pt-[72px] lg:pt-[82px]">
       <Image
         src={image}
         alt=""

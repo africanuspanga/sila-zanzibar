@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X, MessageCircle, Search } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import { primaryNav, whatsappLink } from "@/lib/site";
+import { primaryNav } from "@/lib/site";
 import { cn } from "@/lib/cn";
 
 export function Header() {
@@ -43,10 +43,10 @@ export function Header() {
           : "bg-transparent"
       )}
     >
-      <div className="container-x flex h-[68px] items-center justify-between gap-4 lg:h-[76px]">
-        <Logo tone={solid ? "dark" : "light"} width={104} />
+      <div className="mx-auto flex h-[72px] w-full max-w-[1600px] items-center justify-between gap-6 px-5 sm:px-8 lg:h-[82px] lg:px-14">
+        <Logo tone={solid ? "dark" : "light"} width={124} />
 
-        <nav className="hidden items-center gap-5 xl:flex">
+        <nav className="hidden items-center gap-6 xl:flex 2xl:gap-8">
           {primaryNav.map((item) => {
             const active =
               item.href === "/"
@@ -76,24 +76,10 @@ export function Header() {
           })}
         </nav>
 
-        <div className="hidden items-center gap-2.5 lg:flex">
-          <a
-            href={whatsappLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              "inline-flex items-center gap-1.5 border px-3.5 py-2.5 text-[0.78rem] font-semibold transition-all duration-300",
-              solid
-                ? "border-navy-800/20 text-navy-800 hover:border-navy-800 hover:bg-navy-800 hover:text-white"
-                : "border-white/30 text-white hover:bg-white hover:text-navy-800"
-            )}
-          >
-            <MessageCircle className="h-4 w-4" />
-            WhatsApp Us
-          </a>
+        <div className="hidden items-center lg:flex">
           <Link
             href="/properties"
-            className="inline-flex items-center gap-1.5 bg-crimson-600 px-4 py-2.5 text-[0.78rem] font-semibold text-white transition-all duration-300 hover:bg-crimson-700"
+            className="inline-flex items-center gap-1.5 bg-crimson-600 px-5 py-3 text-[0.8rem] font-semibold text-white transition-all duration-300 hover:bg-crimson-700"
           >
             <Search className="h-4 w-4" />
             Find a Property
@@ -102,15 +88,6 @@ export function Header() {
 
         {/* Mobile controls */}
         <div className="flex items-center gap-2 xl:hidden">
-          <a
-            href={whatsappLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="WhatsApp SILA"
-            className="flex h-10 w-10 items-center justify-center bg-[#25D366] text-white lg:hidden"
-          >
-            <MessageCircle className="h-5 w-5" />
-          </a>
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Close menu" : "Open menu"}
@@ -131,7 +108,7 @@ export function Header() {
           open ? "max-h-[80vh]" : "max-h-0"
         )}
       >
-        <nav className="container-x flex flex-col py-4">
+        <nav className="mx-auto flex w-full max-w-[1600px] flex-col px-5 py-4 sm:px-8">
           {primaryNav.map((item) => (
             <Link
               key={item.href}
@@ -141,16 +118,8 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <div className="mt-4 grid grid-cols-2 gap-2.5">
-            <a
-              href={whatsappLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-whatsapp"
-            >
-              WhatsApp Us
-            </a>
-            <Link href="/properties" className="btn-red">
+          <div className="mt-4">
+            <Link href="/properties" className="btn-red w-full">
               Find a Property
             </Link>
           </div>

@@ -48,8 +48,8 @@ export function Intro() {
 
         <Reveal delay={0.1} className="relative">
           <ArchImage
-            src="/property-villa.jpg"
-            alt="A premium Swahili villa with private pool in Zanzibar"
+            src="/who-we-are.jpg"
+            alt="A premium Zanzibar resort with pool and tropical gardens"
             className="aspect-[4/5] w-full"
             sizes="(max-width:1024px) 100vw, 45vw"
           />

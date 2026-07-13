@@ -56,7 +56,7 @@ export default async function PropertyDetailPage({
 
   return (
     <>
-      <div className="container-x pt-[92px] lg:pt-[104px]">
+      <div className="container-x pt-[96px] lg:pt-[110px]">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[0.78rem] text-muted">
           <Link href="/" className="hover:text-navy-800">Home</Link>

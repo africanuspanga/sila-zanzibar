@@ -43,7 +43,7 @@ export default async function DevelopmentDetailPage({
 
   return (
     <>
-      <div className="container-x pt-[92px] lg:pt-[104px]">
+      <div className="container-x pt-[96px] lg:pt-[110px]">
         <nav className="flex items-center gap-1.5 text-[0.78rem] text-muted">
           <Link href="/" className="hover:text-navy-800">Home</Link>
           <ChevronRight className="h-3.5 w-3.5" />

@@ -88,7 +88,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             {columns.map((col) => (
               <div key={col.title}>
                 <h3 className="text-[0.72rem] font-semibold uppercase tracking-brand text-crimson-400">
@@ -108,36 +108,38 @@ export function Footer() {
                 </ul>
               </div>
             ))}
+          </div>
+        </div>
 
-            <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-              <h3 className="text-[0.72rem] font-semibold uppercase tracking-brand text-crimson-400">
-                Contact
-              </h3>
-              <ul className="mt-4 space-y-3 text-[0.85rem] text-white/65">
-                <li className="flex items-center gap-2.5">
-                  <Phone className="h-4 w-4 shrink-0 text-white/40" /> {site.phone}
-                </li>
-                <li>
-                  <a
-                    href={whatsappLink()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2.5 transition-colors hover:text-white"
-                  >
-                    <MessageCircle className="h-4 w-4 shrink-0 text-white/40" /> WhatsApp
-                  </a>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Mail className="h-4 w-4 shrink-0 text-white/40" /> {site.email}
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/40" /> {site.address}
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <Clock className="h-4 w-4 shrink-0 text-white/40" /> {site.hours}
-                </li>
-              </ul>
-            </div>
+        {/* Contact — full-width band so it has room to breathe */}
+        <div className="mt-12 border-t border-white/10 pt-8">
+          <h3 className="text-[0.72rem] font-semibold uppercase tracking-brand text-crimson-400">
+            Contact
+          </h3>
+          <div className="mt-5 flex flex-col gap-x-12 gap-y-4 text-[0.9rem] text-white/70 sm:flex-row sm:flex-wrap sm:items-center">
+            <span className="flex items-center gap-2.5">
+              <Phone className="h-4 w-4 shrink-0 text-crimson-400" /> {site.phone}
+            </span>
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2.5 transition-colors hover:text-white"
+            >
+              <MessageCircle className="h-4 w-4 shrink-0 text-crimson-400" /> WhatsApp
+            </a>
+            <a
+              href={`mailto:${site.email}`}
+              className="flex items-center gap-2.5 transition-colors hover:text-white"
+            >
+              <Mail className="h-4 w-4 shrink-0 text-crimson-400" /> {site.email}
+            </a>
+            <span className="flex items-center gap-2.5">
+              <MapPin className="h-4 w-4 shrink-0 text-crimson-400" /> {site.address}
+            </span>
+            <span className="flex items-center gap-2.5">
+              <Clock className="h-4 w-4 shrink-0 text-crimson-400" /> {site.hours}
+            </span>
           </div>
         </div>
 
