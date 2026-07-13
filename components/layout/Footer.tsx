@@ -144,12 +144,6 @@ export function Footer() {
         </div>
 
         <div className="mt-14 border-t border-white/10 pt-8">
-          <p className="mb-5 text-xs leading-relaxed text-white/40">
-            Listings, prices and imagery shown on this website are illustrative and
-            for demonstration until SILA&apos;s live inventory is published from the
-            admin dashboard. Legal, tax, valuation and regulatory matters should be
-            confirmed by qualified professionals and the relevant Zanzibar authorities.
-          </p>
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-4">
               <Logo tone="light" width={84} />
