@@ -56,7 +56,7 @@ const socials = [
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-navy-950 text-white">
+    <footer className="relative overflow-hidden border-t border-white/15 bg-navy-950 text-white">
       <ArchOutline
         className="pointer-events-none absolute -right-16 -top-24 h-[420px] w-[320px] text-white/[0.04]"
         strokeWidth={2}

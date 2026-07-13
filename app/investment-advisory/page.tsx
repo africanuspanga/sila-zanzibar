@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Info, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
-import { consultancyServices, investmentDisclaimer } from "@/lib/data";
+import { consultancyServices } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Investment Advisory in Zanzibar",
@@ -35,25 +35,17 @@ export default function InvestmentAdvisoryPage() {
                 </div>
               </Reveal>
             ))}
-            <div className="h-full bg-navy-800 p-8 text-white">
-              <CheckCircle2 className="h-8 w-8 text-crimson-400" strokeWidth={1.5} />
-              <h3 className="mt-4 font-display text-xl">Due Diligence Coordination</h3>
-              <p className="mt-2.5 text-[0.88rem] leading-relaxed text-white/75">
+            <div className="flex h-full flex-col gap-4 bg-navy-800 p-8 text-white sm:col-span-2 sm:flex-row sm:items-center sm:gap-8 lg:col-span-3">
+              <div className="flex items-center gap-4 sm:w-1/3 sm:shrink-0">
+                <CheckCircle2 className="h-8 w-8 shrink-0 text-crimson-400" strokeWidth={1.5} />
+                <h3 className="font-display text-xl">Due Diligence Coordination</h3>
+              </div>
+              <p className="text-[0.88rem] leading-relaxed text-white/75 sm:flex-1">
                 SILA coordinates with qualified lawyers, surveyors, valuers, architects
                 and relevant professionals where their expertise is required.
               </p>
             </div>
           </div>
-
-          <Reveal>
-            <div className="mt-8 flex items-start gap-3 border border-crimson-200 bg-crimson-50 p-6">
-              <Info className="mt-0.5 h-5 w-5 shrink-0 text-crimson-600" />
-              <p className="text-[0.86rem] leading-relaxed text-navy-800">
-                <span className="font-semibold">Important: </span>
-                {investmentDisclaimer}
-              </p>
-            </div>
-          </Reveal>
         </div>
       </section>
 
