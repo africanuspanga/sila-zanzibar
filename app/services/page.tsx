@@ -16,7 +16,7 @@ const services = [
   { icon: Home, title: "Property Sales", body: "Find residential, commercial, development and investment properties available for purchase.", href: "/properties" },
   { icon: KeyRound, title: "Property Rentals", body: "Find long-term and selected short-term rental opportunities across Zanzibar.", href: "/properties?listing=rent" },
   { icon: Megaphone, title: "Property Marketing", body: "Allow SILA to present and promote your property to potential clients.", href: "/list-your-property" },
-  { icon: Hammer, title: "Build-to-Own Developments", body: "Secure selected properties during construction and pay according to an agreed schedule.", href: "/developments" },
+  { icon: Hammer, title: "Build-to-Own Projects", body: "Secure selected properties during construction and pay according to an agreed schedule.", href: "/projects" },
   { icon: Map, title: "Plot & Land Sales", body: "Explore land suitable for homes, businesses, hospitality, development and investment.", href: "/plots" },
   { icon: Compass, title: "Investment Consultancy", body: "Structured guidance when comparing locations, property types, acquisition processes and development opportunities.", href: "/investment-advisory" },
   { icon: CalendarCheck, title: "Property Viewing Coordination", body: "Arrange property inspections with the SILA team.", href: "/contact" },

@@ -73,7 +73,7 @@ export function SearchBox({ className }: { className?: string }) {
     if (type) params.set("type", type);
     if (location) params.set("location", location);
     if (beds) params.set("beds", beds);
-    const dest = intent === "Land" ? "/plots" : intent === "Build-to-Own" ? "/developments" : "/properties";
+    const dest = intent === "Land" ? "/plots" : intent === "Build-to-Own" ? "/projects" : "/properties";
     router.push(`${dest}?${params.toString()}`);
   }
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check, Send } from "lucide-react";
 import { zanzibarLocations, whatsappLink } from "@/lib/site";
+import { submitEnquiry } from "@/app/actions/leads";
 
 const serviceOptions = [
   "Buy Property", "Rent Property", "Sell Property", "List Property",
@@ -35,34 +36,49 @@ export function ContactForm() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        const get = (k: string) => String(fd.get(k) ?? "");
         setSent(true);
+        void submitEnquiry({
+          name: get("name"),
+          email: get("email"),
+          phone: get("phone"),
+          country: get("country"),
+          service: get("service"),
+          location: get("location"),
+          budget: get("budget"),
+          currency: get("currency"),
+          preferredContact: get("preferredContact"),
+          message: get("message"),
+          source: "contact",
+        });
       }}
       className="space-y-4"
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
           <span className="field-label">Full name *</span>
-          <input required value={name} onChange={(e) => setName(e.target.value)} className="field" placeholder="Your name" />
+          <input name="name" required value={name} onChange={(e) => setName(e.target.value)} className="field" placeholder="Your name" />
         </label>
         <label className="block">
           <span className="field-label">Email</span>
-          <input type="email" className="field" placeholder="you@email.com" />
+          <input name="email" type="email" className="field" placeholder="you@email.com" />
         </label>
         <label className="block">
           <span className="field-label">Phone *</span>
-          <input required className="field" placeholder="+255 …" />
+          <input name="phone" required className="field" placeholder="+255 …" />
         </label>
         <label className="block">
           <span className="field-label">WhatsApp</span>
-          <input className="field" placeholder="+255 …" />
+          <input name="whatsapp" className="field" placeholder="+255 …" />
         </label>
         <label className="block">
           <span className="field-label">Country</span>
-          <input className="field" placeholder="Country of residence" />
+          <input name="country" className="field" placeholder="Country of residence" />
         </label>
         <label className="block">
           <span className="field-label">Service required</span>
-          <select className="field" defaultValue="">
+          <select name="service" className="field" defaultValue="">
             <option value="" disabled>Select a service…</option>
             {serviceOptions.map((s) => (
               <option key={s} value={s}>{s}</option>
@@ -71,7 +87,7 @@ export function ContactForm() {
         </label>
         <label className="block">
           <span className="field-label">Preferred location</span>
-          <select className="field" defaultValue="">
+          <select name="location" className="field" defaultValue="">
             <option value="">Anywhere in Zanzibar</option>
             {zanzibarLocations.map((l) => (
               <option key={l} value={l}>{l}</option>
@@ -81,11 +97,11 @@ export function ContactForm() {
         <div className="grid grid-cols-[1fr_auto] gap-3">
           <label className="block">
             <span className="field-label">Budget</span>
-            <input className="field" placeholder="Approx. budget" />
+            <input name="budget" className="field" placeholder="Approx. budget" />
           </label>
           <label className="block">
             <span className="field-label">Currency</span>
-            <select className="field" defaultValue="USD">
+            <select name="currency" className="field" defaultValue="USD">
               <option>USD</option>
               <option>TZS</option>
             </select>
@@ -94,11 +110,11 @@ export function ContactForm() {
       </div>
       <label className="block">
         <span className="field-label">Message</span>
-        <textarea rows={4} className="field resize-none" placeholder="How can we help?" />
+        <textarea name="message" rows={4} className="field resize-none" placeholder="How can we help?" />
       </label>
       <label className="block sm:max-w-xs">
         <span className="field-label">Preferred contact method</span>
-        <select className="field" defaultValue="WhatsApp">
+        <select name="preferredContact" className="field" defaultValue="WhatsApp">
           <option>WhatsApp</option>
           <option>Phone call</option>
           <option>Email</option>

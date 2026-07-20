@@ -13,6 +13,8 @@ import { Testimonials } from "@/components/home/Testimonials";
 import { Faq } from "@/components/home/Faq";
 import { FinalCta } from "@/components/home/FinalCta";
 
+export const revalidate = 300;
+
 export default function HomePage() {
   return (
     <>

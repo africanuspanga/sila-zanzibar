@@ -7,9 +7,10 @@ import { Reveal } from "@/components/ui/Reveal";
 import { ArchImage } from "@/components/ui/Arch";
 
 export const metadata: Metadata = {
-  title: "About SILA Real Estate",
+  title: "About SILA",
   description:
-    "SILA Real Estate is a Zanzibar-based property company helping individuals, families, businesses and investors access quality real estate opportunities across the island.",
+    "SILA is a Zanzibar-based real estate developer and investor, helping individuals, families, businesses and investors buy, rent, build, develop and invest in property and land across Zanzibar and mainland Tanzania.",
+  alternates: { canonical: "/about" },
 };
 
 const values = [
@@ -40,16 +41,21 @@ export default function AboutPage() {
             </Reveal>
             <Reveal delay={0.05}>
               <p className="mt-6 text-[1.15rem] leading-relaxed text-navy-800">
-                SILA Real Estate is a Zanzibar-based property company helping
-                individuals, families, businesses and investors access quality real
-                estate opportunities across the island.
+                SILA is a real estate developer and investor based in Zanzibar,
+                helping individuals, families, businesses and investors buy, rent,
+                build, develop and invest in property and land across the island and
+                mainland Tanzania.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-5 text-[1rem] leading-relaxed text-muted">
-                Our services cover property sales, rentals, build-to-own developments,
-                plot sales, owner listings and land investment consultancy — bringing
-                property, development and investment together under one trusted partner.
+                As both a developer and an investor, we don&apos;t simply list
+                properties — we create them and put our own conviction behind them.
+                From build-to-own homes and residential projects to plot sales, owner
+                listings and land investment advisory, SILA brings property,
+                development and investment together under one trusted partner — with
+                the goal of making owning, building and investing in Zanzibar clearer,
+                more professional and more rewarding.
               </p>
             </Reveal>
           </div>
@@ -86,7 +92,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section id="team" className="bg-white py-20 lg:py-28">
+      <section id="values" className="bg-white py-20 lg:py-28">
         <div className="container-x">
           <div className="max-w-2xl">
             <span className="eyebrow"><span className="h-px w-6 bg-current" /> What we stand for</span>

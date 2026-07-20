@@ -3,7 +3,8 @@ import Image from "next/image";
 import { MapPin, Navigation } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { featuredProperties, formatPrice } from "@/lib/data";
+import { formatPrice } from "@/lib/data";
+import { getFeaturedProperties } from "@/lib/content";
 
 // Illustrative markers positioned over an aerial image. A live, clustered map
 // (Google/Mapbox) plugs into this section once an API key is configured.
@@ -17,7 +18,8 @@ const markers = [
 
 const filters = ["Property type", "Sale / Rent", "Price range", "Bedrooms", "Build-to-own", "Land", "Commercial", "Beachfront"];
 
-export function MapPreview() {
+export async function MapPreview() {
+  const featuredProperties = await getFeaturedProperties();
   return (
     <section className="bg-white py-20 lg:py-28">
       <div className="container-x">

@@ -20,9 +20,10 @@ export function Intro() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-6 text-[1.02rem] leading-relaxed text-muted">
-              Whether you are searching for a home, building an investment portfolio,
-              purchasing land, or looking for commercial space, SILA gives you access
-              to carefully selected opportunities across Zanzibar.
+              As a Zanzibar real estate developer and investor, SILA gives you access
+              to carefully selected opportunities — whether you are searching for a
+              home, building an investment portfolio, purchasing land or looking for
+              commercial space across the island.
             </p>
           </Reveal>
           <Reveal delay={0.15}>

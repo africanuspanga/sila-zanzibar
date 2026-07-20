@@ -81,6 +81,16 @@ export interface Plot {
   coords: { lat: number; lng: number };
 }
 
+export interface TeamMember {
+  id: string;
+  name: string;
+  title: string;
+  base: "Zanzibar" | "Mainland Tanzania";
+  // Optional headshot. Leave empty to show a branded monogram placeholder.
+  // Admin can upload a photo per member from the dashboard.
+  image?: string;
+}
+
 const IMG = {
   aerialResort: "/silo-image.jpg",
   aerialTown: "/silo-image-2.jpg",
@@ -564,6 +574,44 @@ export const plots: Plot[] = [
   },
 ];
 
+// ---------------------------------- Team ------------------------------------
+// Placeholder team members — sample names and titles for now. In production
+// these are managed from the admin dashboard (name, title, base and headshot).
+// Leaving `image` empty renders a branded monogram until a photo is uploaded.
+
+export const team: TeamMember[] = [
+  {
+    id: "t1",
+    name: "Amina Juma",
+    title: "Managing Director",
+    base: "Zanzibar",
+  },
+  {
+    id: "t2",
+    name: "Khalid Salim",
+    title: "Head of Sales & Lettings",
+    base: "Zanzibar",
+  },
+  {
+    id: "t3",
+    name: "Fatma Ali",
+    title: "Client Relations Manager",
+    base: "Zanzibar",
+  },
+  {
+    id: "t4",
+    name: "Joseph Mushi",
+    title: "Head of Investment Advisory",
+    base: "Mainland Tanzania",
+  },
+  {
+    id: "t5",
+    name: "Neema Mbwana",
+    title: "Development & Projects Manager",
+    base: "Mainland Tanzania",
+  },
+];
+
 // -------------------------- Static marketing content ------------------------
 
 export const coreServices = [
@@ -576,7 +624,7 @@ export const coreServices = [
   {
     title: "Build-to-Own Properties",
     body: "Secure a property during construction through an agreed installment plan and receive your completed property after development.",
-    cta: { label: "View Developments", href: "/developments" },
+    cta: { label: "View Projects", href: "/projects" },
     icon: "hammer",
   },
   {

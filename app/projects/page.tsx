@@ -4,20 +4,25 @@ import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { DevelopmentCard } from "@/components/property/DevelopmentCard";
 import { Reveal } from "@/components/ui/Reveal";
-import { buildSteps, developments } from "@/lib/data";
+import { buildSteps } from "@/lib/data";
+import { getProjects } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Build-to-Own Developments in Zanzibar",
+  title: "Projects in Zanzibar",
   description:
-    "Secure a property during construction and pay in installments. Explore SILA's build-to-own developments across Zanzibar.",
+    "Explore SILA's build-to-own projects and developments across Zanzibar. Secure a property during construction and pay according to an agreed installment schedule.",
+  alternates: { canonical: "/projects" },
 };
 
-export default function DevelopmentsPage() {
+export const revalidate = 300;
+
+export default async function ProjectsPage() {
+  const developments = await getProjects();
   return (
     <>
       <PageHero
-        eyebrow="Developments"
-        crumb="Developments"
+        eyebrow="Projects"
+        crumb="Projects"
         title="Build Today. Own Tomorrow."
         intro="Secure selected properties during construction and pay according to an agreed installment schedule. On completion, the finished property is transferred under the applicable agreement and legal process."
         image="/silo-image-5.jpg"

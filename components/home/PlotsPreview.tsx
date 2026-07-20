@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PlotCard } from "@/components/property/PlotCard";
-import { plots } from "@/lib/data";
+import { getPlots } from "@/lib/content";
 
 const categories = [
   "Residential plots",
@@ -15,7 +15,8 @@ const categories = [
   "Subdivided development plots",
 ];
 
-export function PlotsPreview() {
+export async function PlotsPreview() {
+  const plots = await getPlots();
   return (
     <section className="bg-white py-20 lg:py-28">
       <div className="container-x">

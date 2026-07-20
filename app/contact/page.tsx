@@ -3,18 +3,20 @@ import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/forms/ContactForm";
-import { site, whatsappLink } from "@/lib/site";
+import { site, whatsappLink, telHref } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact SILA",
   description:
-    "Contact SILA Real Estate to buy, rent, sell, list, build or invest in Zanzibar property. Our team is ready to understand your requirements.",
+    "Contact SILA to buy, rent, sell, list, build, develop or invest in Zanzibar property. Call +255 725 715 250 or email info@silazanzibar.com.",
+  alternates: { canonical: "/contact" },
 };
 
 const details = [
-  { icon: Phone, label: "Phone", value: site.phone, href: `tel:${site.phone.replace(/\s/g, "")}` },
+  { icon: Phone, label: "Phone", value: site.phone, href: telHref },
   { icon: MessageCircle, label: "WhatsApp", value: "Chat with our team", href: whatsappLink() },
   { icon: Mail, label: "Email", value: site.email, href: `mailto:${site.email}` },
+  { icon: Mail, label: "Email", value: site.emailAlt, href: `mailto:${site.emailAlt}` },
   { icon: MapPin, label: "Office", value: site.address },
   { icon: Clock, label: "Hours", value: site.hours },
 ];
@@ -49,7 +51,7 @@ export default function ContactPage() {
                   </div>
                 );
                 return (
-                  <li key={d.label}>
+                  <li key={`${d.label}-${d.value}`}>
                     {d.href ? (
                       <a href={d.href} target={d.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="block transition-opacity hover:opacity-70">
                         {content}
@@ -61,10 +63,6 @@ export default function ContactPage() {
                 );
               })}
             </ul>
-
-            <div className="mt-8 border border-sand-300 bg-sand-50 p-5 text-sm text-muted">
-              Contact details shown are placeholders and will be confirmed by SILA.
-            </div>
           </div>
 
           <Reveal>

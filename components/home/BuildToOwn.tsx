@@ -53,11 +53,11 @@ export function BuildToOwn() {
 
             <Reveal delay={0.2}>
               <div className="mt-9 flex flex-wrap gap-3">
-                <Link href="/developments" className="btn-red group">
+                <Link href="/projects" className="btn-red group">
                   Explore Build-to-Own Projects
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
-                <Link href="/developments#payment-plan" className="btn-ghost-light">
+                <Link href="/projects#payment-plan" className="btn-ghost-light">
                   <FileSignature className="h-4 w-4" /> Request a Payment Plan
                 </Link>
               </div>

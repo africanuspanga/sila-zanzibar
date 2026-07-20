@@ -14,7 +14,7 @@ export function DevelopmentCard({ development }: { development: Development }) {
   const d = development;
   return (
     <article className="group flex flex-col overflow-hidden border border-sand-300 bg-white shadow-card transition-all duration-500 ease-silk hover:-translate-y-1 hover:shadow-card-hover">
-      <Link href={`/developments/${d.slug}`} className="relative block aspect-[16/10] overflow-hidden">
+      <Link href={`/projects/${d.slug}`} className="relative block aspect-[16/10] overflow-hidden">
         <Image
           src={d.image}
           alt={d.name}
@@ -42,7 +42,7 @@ export function DevelopmentCard({ development }: { development: Development }) {
           From <span className="text-navy-800">{formatPrice(d.startingPrice, d.currency)}</span> · Est. {d.estCompletion}
         </p>
         <h3 className="mt-1.5 font-display text-xl leading-snug text-ink">
-          <Link href={`/developments/${d.slug}`} className="transition-colors hover:text-navy-700">
+          <Link href={`/projects/${d.slug}`} className="transition-colors hover:text-navy-700">
             {d.name}
           </Link>
         </h3>
@@ -60,10 +60,10 @@ export function DevelopmentCard({ development }: { development: Development }) {
           ))}
         </div>
         <Link
-          href={`/developments/${d.slug}`}
+          href={`/projects/${d.slug}`}
           className="group/btn mt-5 inline-flex items-center justify-between border border-sand-300 px-4 py-2.5 text-[0.8rem] font-semibold text-navy-800 transition-colors hover:border-navy-800 hover:bg-navy-800 hover:text-white"
         >
-          View Development
+          View Project
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
         </Link>
       </div>

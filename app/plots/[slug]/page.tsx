@@ -7,11 +7,15 @@ import {
   Compass, ChevronRight, MessageCircle, Check,
 } from "lucide-react";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
-import { plots, getPlot, formatPrice } from "@/lib/data";
+import { formatPrice } from "@/lib/data";
+import { getPlots, getPlotBySlug } from "@/lib/content";
 import { whatsappLink } from "@/lib/site";
 
-export function generateStaticParams() {
-  return plots.map((p) => ({ slug: p.slug }));
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const list = await getPlots();
+  return list.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -20,9 +24,13 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const p = getPlot(slug);
+  const p = await getPlotBySlug(slug);
   if (!p) return { title: "Plot not found" };
-  return { title: `${p.title} — ${p.location}`, description: p.description };
+  return {
+    title: `${p.title} — ${p.location}`,
+    description: p.description,
+    alternates: { canonical: `/plots/${p.slug}` },
+  };
 }
 
 export default async function PlotDetailPage({
@@ -31,7 +39,7 @@ export default async function PlotDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const p = getPlot(slug);
+  const p = await getPlotBySlug(slug);
   if (!p) notFound();
 
   const facts = [
@@ -154,7 +162,7 @@ export default async function PlotDetailPage({
                 Request documentation, a site visit or a location map for {p.title}.
               </p>
               <div className="mt-5">
-                <EnquiryForm context={`the plot "${p.title}" in ${p.location}`} compact />
+                <EnquiryForm context={`the plot "${p.title}" in ${p.location}`} source="plot_enquiry" compact />
               </div>
             </div>
             <a

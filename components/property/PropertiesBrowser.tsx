@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal, LayoutGrid, Rows3, X, Search } from "lucide-react";
 import { PropertyCard } from "./PropertyCard";
-import { properties } from "@/lib/data";
+import type { Property } from "@/lib/data";
 import { zanzibarLocations } from "@/lib/site";
 import { cn } from "@/lib/cn";
 
@@ -17,7 +17,7 @@ const sortOptions = [
   { value: "price-desc", label: "Price: High to Low" },
 ];
 
-export function PropertiesBrowser() {
+export function PropertiesBrowser({ properties }: { properties: Property[] }) {
   const params = useSearchParams();
 
   const [listing, setListing] = useState(() => {

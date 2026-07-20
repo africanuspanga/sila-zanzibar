@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Instagram, Facebook, Linkedin, Youtube, Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { ArchOutline } from "@/components/ui/Arch";
-import { site, whatsappLink } from "@/lib/site";
+import { site, whatsappLink, telHref, contactEmails } from "@/lib/site";
 
 const columns = [
   {
@@ -10,7 +10,7 @@ const columns = [
     links: [
       { label: "About SILA", href: "/about" },
       { label: "Our Services", href: "/services" },
-      { label: "Our Team", href: "/about#team" },
+      { label: "Our Team", href: "/team" },
       { label: "Careers", href: "/contact" },
       { label: "Contact", href: "/contact" },
     ],
@@ -27,12 +27,12 @@ const columns = [
     ],
   },
   {
-    title: "Developments",
+    title: "Projects",
     links: [
-      { label: "Build-to-Own", href: "/developments" },
-      { label: "Current Projects", href: "/developments" },
-      { label: "Construction Updates", href: "/developments" },
-      { label: "Payment Plans", href: "/developments" },
+      { label: "Build-to-Own", href: "/projects" },
+      { label: "Current Projects", href: "/projects" },
+      { label: "Construction Updates", href: "/projects" },
+      { label: "Payment Plans", href: "/projects#payment-plan" },
     ],
   },
   {
@@ -117,9 +117,12 @@ export function Footer() {
             Contact
           </h3>
           <div className="mt-5 flex flex-col gap-x-12 gap-y-4 text-[0.9rem] text-white/70 sm:flex-row sm:flex-wrap sm:items-center">
-            <span className="flex items-center gap-2.5">
+            <a
+              href={telHref}
+              className="flex items-center gap-2.5 transition-colors hover:text-white"
+            >
               <Phone className="h-4 w-4 shrink-0 text-crimson-400" /> {site.phone}
-            </span>
+            </a>
             <a
               href={whatsappLink()}
               target="_blank"
@@ -128,12 +131,15 @@ export function Footer() {
             >
               <MessageCircle className="h-4 w-4 shrink-0 text-crimson-400" /> WhatsApp
             </a>
-            <a
-              href={`mailto:${site.email}`}
-              className="flex items-center gap-2.5 transition-colors hover:text-white"
-            >
-              <Mail className="h-4 w-4 shrink-0 text-crimson-400" /> {site.email}
-            </a>
+            {contactEmails.map((email) => (
+              <a
+                key={email}
+                href={`mailto:${email}`}
+                className="flex items-center gap-2.5 transition-colors hover:text-white"
+              >
+                <Mail className="h-4 w-4 shrink-0 text-crimson-400" /> {email}
+              </a>
+            ))}
             <span className="flex items-center gap-2.5">
               <MapPin className="h-4 w-4 shrink-0 text-crimson-400" /> {site.address}
             </span>
@@ -148,7 +154,7 @@ export function Footer() {
             <div className="flex items-center gap-4">
               <Logo tone="light" width={84} />
               <span className="text-xs text-white/45">
-                © 2026 SILA Real Estate. All rights reserved.
+                © 2026 SILA LIMITED. All rights reserved.
               </span>
             </div>
             <div className="flex gap-5 text-xs text-white/45">

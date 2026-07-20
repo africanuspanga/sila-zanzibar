@@ -9,11 +9,15 @@ import { PropertyGallery } from "@/components/property/PropertyGallery";
 import { PropertyCard } from "@/components/property/PropertyCard";
 import { ShareSave } from "@/components/property/ShareSave";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
-import { properties, getProperty, formatPrice } from "@/lib/data";
+import { formatPrice } from "@/lib/data";
+import { getProperties, getPropertyBySlug } from "@/lib/content";
 import { site, whatsappLink } from "@/lib/site";
 
-export function generateStaticParams() {
-  return properties.map((p) => ({ slug: p.slug }));
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const list = await getProperties();
+  return list.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -22,11 +26,12 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const p = getProperty(slug);
+  const p = await getPropertyBySlug(slug);
   if (!p) return { title: "Property not found" };
   return {
     title: `${p.title} — ${p.location}`,
     description: p.shortDescription,
+    alternates: { canonical: `/properties/${p.slug}` },
     openGraph: { images: [p.image] },
   };
 }
@@ -37,10 +42,11 @@ export default async function PropertyDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const p = getProperty(slug);
+  const p = await getPropertyBySlug(slug);
   if (!p) notFound();
 
-  const related = properties
+  const all = await getProperties();
+  const related = all
     .filter((x) => x.id !== p.id && (x.location === p.location || x.propertyType === p.propertyType))
     .slice(0, 3);
 
@@ -170,7 +176,7 @@ export default async function PropertyDetailPage({
                 Enquire about {p.title}. A SILA advisor will respond promptly.
               </p>
               <div className="mt-5">
-                <EnquiryForm context={`${p.title} (${p.reference})`} compact />
+                <EnquiryForm context={`${p.title} (${p.reference})`} source="property_enquiry" compact />
               </div>
             </div>
 

@@ -3,16 +3,18 @@
 import { useState } from "react";
 import { Check, Send } from "lucide-react";
 import { whatsappLink } from "@/lib/site";
+import { submitEnquiry } from "@/app/actions/leads";
 
-// Enquiry form. With no backend wired yet, submission shows a confirmation and
-// routes the enquiry to WhatsApp so no lead is lost. Swap `onSubmit` for a
-// server action / API route when the admin dashboard lead pipeline is ready.
+// Enquiry form. Persists to Supabase via a server action when configured, and
+// always shows a confirmation + WhatsApp fallback so no lead is lost.
 export function EnquiryForm({
   context,
   compact = false,
+  source = "enquiry",
 }: {
   context?: string;
   compact?: boolean;
+  source?: string;
 }) {
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({
@@ -56,6 +58,17 @@ export function EnquiryForm({
       onSubmit={(e) => {
         e.preventDefault();
         setSent(true);
+        void submitEnquiry({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          country: form.country,
+          preferredDate: form.date,
+          preferredContact: form.contact,
+          message: form.message,
+          context,
+          source,
+        });
       }}
       className="space-y-4"
     >

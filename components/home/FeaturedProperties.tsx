@@ -3,9 +3,10 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PropertyCard } from "@/components/property/PropertyCard";
-import { featuredProperties } from "@/lib/data";
+import { getFeaturedProperties } from "@/lib/content";
 
-export function FeaturedProperties() {
+export async function FeaturedProperties() {
+  const featuredProperties = await getFeaturedProperties();
   return (
     <section className="bg-sand-100 py-20 lg:py-28">
       <div className="container-x">

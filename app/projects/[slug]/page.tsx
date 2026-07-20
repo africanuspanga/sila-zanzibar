@@ -7,11 +7,15 @@ import {
 } from "lucide-react";
 import { PropertyGallery } from "@/components/property/PropertyGallery";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
-import { developments, getDevelopment, formatPrice } from "@/lib/data";
+import { formatPrice } from "@/lib/data";
+import { getProjects, getProjectBySlug } from "@/lib/content";
 import { whatsappLink } from "@/lib/site";
 
-export function generateStaticParams() {
-  return developments.map((d) => ({ slug: d.slug }));
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const list = await getProjects();
+  return list.map((d) => ({ slug: d.slug }));
 }
 
 export async function generateMetadata({
@@ -20,9 +24,13 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const d = getDevelopment(slug);
-  if (!d) return { title: "Development not found" };
-  return { title: `${d.name} — ${d.location}`, description: d.shortDescription };
+  const d = await getProjectBySlug(slug);
+  if (!d) return { title: "Project not found" };
+  return {
+    title: `${d.name} — ${d.location}`,
+    description: d.shortDescription,
+    alternates: { canonical: `/projects/${d.slug}` },
+  };
 }
 
 export default async function DevelopmentDetailPage({
@@ -31,7 +39,7 @@ export default async function DevelopmentDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const d = getDevelopment(slug);
+  const d = await getProjectBySlug(slug);
   if (!d) notFound();
 
   const facts = [
@@ -47,7 +55,7 @@ export default async function DevelopmentDetailPage({
         <nav className="flex items-center gap-1.5 text-[0.78rem] text-muted">
           <Link href="/" className="hover:text-navy-800">Home</Link>
           <ChevronRight className="h-3.5 w-3.5" />
-          <Link href="/developments" className="hover:text-navy-800">Developments</Link>
+          <Link href="/projects" className="hover:text-navy-800">Projects</Link>
           <ChevronRight className="h-3.5 w-3.5" />
           <span className="text-navy-800">{d.name}</span>
         </nav>
@@ -171,7 +179,7 @@ export default async function DevelopmentDetailPage({
                 Request pricing, floor plans and payment plans for {d.name}.
               </p>
               <div className="mt-5">
-                <EnquiryForm context={`the ${d.name} development`} compact />
+                <EnquiryForm context={`the ${d.name} development`} source="project_enquiry" compact />
               </div>
             </div>
             <a
