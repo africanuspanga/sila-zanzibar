@@ -75,6 +75,10 @@ export type ListingInput = {
   mapsLink?: string;
   description?: string;
   preferredContact?: string;
+  // Storage object paths in the property-submissions bucket.
+  imagePaths?: string[];
+  videoPath?: string;
+  documentPaths?: string[];
 };
 
 export async function submitPropertyListing(input: ListingInput): Promise<LeadResult> {
@@ -97,6 +101,9 @@ export async function submitPropertyListing(input: ListingInput): Promise<LeadRe
     maps_link: input.mapsLink || null,
     description: input.description || null,
     preferred_contact: input.preferredContact || null,
+    image_paths: input.imagePaths ?? [],
+    video_path: input.videoPath || null,
+    document_paths: input.documentPaths ?? [],
   };
 
   const db = getSupabaseServerClient();

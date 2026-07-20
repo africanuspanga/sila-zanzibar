@@ -56,10 +56,20 @@ are persisted — no code changes required.
 - The **service-role key bypasses RLS** and is used only by the seed script and
   trusted server code. Keep it server-side only.
 
+## Storage — property submission media
+
+`supabase/schema.sql` also creates a **private** Storage bucket
+`property-submissions` and a policy that lets the public form **upload** (but
+not read) files. The `List Your Property` form uploads images/video/documents
+straight from the browser and stores their object paths in the
+`property_submissions` row (`image_paths`, `video_path`, `document_paths`).
+
+Because the bucket is private, review the files in the Supabase dashboard
+(Storage → property-submissions) or generate signed URLs with the service-role
+key. When a submission is approved, move/copy the images into a public listing
+image location as part of publishing.
+
 ## Notes
 
-- The `List Your Property` form persists its text fields to
-  `property_submissions`. File uploads (images/video/docs) are still UI-only —
-  wire them to a Supabase Storage bucket when that flow is prioritised.
 - `projects` is the DB table for what the code still calls `developments`
   internally (the user-facing section was renamed to "Projects").

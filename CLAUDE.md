@@ -116,8 +116,11 @@ Env vars (`.env.example` → `.env.local`, also add to Vercel):
 
 Lead tables: `enquiries` (Contact + Enquiry forms; `source` distinguishes
 contact / property_enquiry / project_enquiry / plot_enquiry) and
-`property_submissions` (List Your Property — text fields; file uploads are still
-UI-only, wire to Supabase Storage when prioritised).
+`property_submissions` (List Your Property). The listing form uploads media
+directly from the browser (`lib/supabase/client.ts` → `getSupabaseBrowserClient`)
+to the **private** `property-submissions` Storage bucket and stores the object
+paths (`image_paths`, `video_path`, `document_paths`) on the row. Review files
+via the Supabase dashboard or service-role signed URLs.
 
 ## Brand / design conventions
 - Colors (Tailwind theme in `tailwind.config.ts`): `navy` (dominant, brand blue

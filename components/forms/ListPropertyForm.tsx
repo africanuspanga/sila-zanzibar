@@ -1,15 +1,42 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Upload, Send } from "lucide-react";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { Check, Upload, Send, Loader2 } from "lucide-react";
 import { zanzibarLocations, whatsappLink } from "@/lib/site";
 import { submitPropertyListing } from "@/app/actions/leads";
+import { getSupabaseBrowserClient, PROPERTY_SUBMISSIONS_BUCKET } from "@/lib/supabase/client";
 
 const propertyTypes = ["House", "Apartment", "Villa", "Office Space", "Commercial Building", "Land / Plot"];
+
+// Pull non-empty File objects for a given input name out of the form data.
+function fileList(fd: FormData, key: string): File[] {
+  return fd.getAll(key).filter((f): f is File => f instanceof File && f.size > 0);
+}
+
+// Upload files to the private property-submissions bucket, returning their paths.
+async function uploadFiles(supa: SupabaseClient, files: File[], prefix: string): Promise<string[]> {
+  const paths: string[] = [];
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `${prefix}/${i}-${safe}`;
+    const { error } = await supa.storage
+      .from(PROPERTY_SUBMISSIONS_BUCKET)
+      .upload(path, file, { upsert: false, contentType: file.type || undefined });
+    if (error) {
+      console.error("[upload]", path, error.message);
+      continue;
+    }
+    paths.push(path);
+  }
+  return paths;
+}
 
 export function ListPropertyForm() {
   const [sent, setSent] = useState(false);
   const [consent, setConsent] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   if (sent) {
     return (
@@ -32,13 +59,33 @@ export function ListPropertyForm() {
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        if (!consent) return;
+        if (!consent || busy) return;
+        // Capture form data synchronously before any await (React reuses the event).
         const fd = new FormData(e.currentTarget);
         const get = (k: string) => String(fd.get(k) ?? "");
-        setSent(true);
-        void submitPropertyListing({
+        const images = fileList(fd, "images");
+        const videos = fileList(fd, "video");
+        const documents = fileList(fd, "documents");
+
+        setBusy(true);
+
+        let imagePaths: string[] = [];
+        let videoPath: string | undefined;
+        let documentPaths: string[] = [];
+
+        // Upload media to Supabase Storage when configured; otherwise skip.
+        const supa = getSupabaseBrowserClient();
+        if (supa && (images.length || videos.length || documents.length)) {
+          const folder = crypto.randomUUID();
+          imagePaths = await uploadFiles(supa, images, `${folder}/images`);
+          const vids = await uploadFiles(supa, videos, `${folder}/video`);
+          videoPath = vids[0];
+          documentPaths = await uploadFiles(supa, documents, `${folder}/documents`);
+        }
+
+        await submitPropertyListing({
           ownerName: get("ownerName"),
           ownerPhone: get("ownerPhone"),
           ownerWhatsapp: get("ownerWhatsapp"),
@@ -57,7 +104,13 @@ export function ListPropertyForm() {
           mapsLink: get("mapsLink"),
           description: get("description"),
           preferredContact: get("preferredContact"),
+          imagePaths,
+          videoPath,
+          documentPaths,
         });
+
+        setBusy(false);
+        setSent(true);
       }}
       className="space-y-8"
     >
@@ -107,9 +160,9 @@ export function ListPropertyForm() {
           <span className="h-4 w-1 bg-crimson-600" /> Media &amp; documents
         </legend>
         <div className="grid gap-4 sm:grid-cols-3">
-          <UploadBox label="Property images" hint="JPG / PNG" />
-          <UploadBox label="Property video" hint="MP4 (optional)" />
-          <UploadBox label="Supporting documents" hint="PDF (optional)" />
+          <UploadBox name="images" label="Property images" hint="JPG / PNG" accept="image/*" />
+          <UploadBox name="video" label="Property video" hint="MP4 (optional)" accept="video/*" multiple={false} />
+          <UploadBox name="documents" label="Supporting documents" hint="PDF (optional)" accept=".pdf,application/pdf" />
         </div>
       </fieldset>
 
@@ -133,8 +186,16 @@ export function ListPropertyForm() {
         </label>
       </fieldset>
 
-      <button type="submit" disabled={!consent} className="btn-red w-full disabled:opacity-40 sm:w-auto">
-        <Send className="h-4 w-4" /> Submit Your Property
+      <button type="submit" disabled={!consent || busy} className="btn-red w-full disabled:opacity-40 sm:w-auto">
+        {busy ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" /> Uploading &amp; submitting…
+          </>
+        ) : (
+          <>
+            <Send className="h-4 w-4" /> Submit Your Property
+          </>
+        )}
       </button>
       <p className="text-xs text-muted">
         Every submitted listing remains unpublished until reviewed and approved by an
@@ -181,13 +242,38 @@ function SelectField({ label, name, options }: { label: string; name: string; op
   );
 }
 
-function UploadBox({ label, hint }: { label: string; hint: string }) {
+function UploadBox({
+  label,
+  hint,
+  name,
+  accept,
+  multiple = true,
+}: {
+  label: string;
+  hint: string;
+  name: string;
+  accept?: string;
+  multiple?: boolean;
+}) {
+  const [files, setFiles] = useState<string[]>([]);
   return (
     <label className="flex cursor-pointer flex-col items-center justify-center gap-2 border border-dashed border-sand-400 bg-sand-50 p-6 text-center transition-colors hover:border-navy-800">
       <Upload className="h-6 w-6 text-navy-800" strokeWidth={1.5} />
       <span className="text-[0.82rem] font-medium text-navy-800">{label}</span>
       <span className="text-xs text-muted">{hint}</span>
-      <input type="file" multiple className="hidden" />
+      {files.length > 0 && (
+        <span className="mt-1 line-clamp-2 text-[0.7rem] font-medium text-navy-800">
+          {files.join(", ")}
+        </span>
+      )}
+      <input
+        type="file"
+        name={name}
+        accept={accept}
+        multiple={multiple}
+        className="hidden"
+        onChange={(e) => setFiles(Array.from(e.target.files ?? []).map((f) => f.name))}
+      />
     </label>
   );
 }

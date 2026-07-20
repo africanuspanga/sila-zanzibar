@@ -221,9 +221,17 @@ create table if not exists property_submissions (
   maps_link         text,
   description       text,
   preferred_contact text,
+  image_paths       text[] not null default '{}',  -- storage paths in the property-submissions bucket
+  video_path        text,
+  document_paths    text[] not null default '{}',
   status            text not null default 'pending_review', -- pending_review | approved | rejected
   created_at        timestamptz not null default now()
 );
+
+-- Idempotent columns for existing installs (safe to re-run).
+alter table property_submissions add column if not exists image_paths    text[] not null default '{}';
+alter table property_submissions add column if not exists video_path     text;
+alter table property_submissions add column if not exists document_paths text[] not null default '{}';
 create index if not exists property_submissions_created_at_idx on property_submissions (created_at desc);
 create index if not exists property_submissions_status_idx on property_submissions (status);
 
@@ -269,3 +277,22 @@ create policy "public insert enquiries" on enquiries
 drop policy if exists "public insert property submissions" on property_submissions;
 create policy "public insert property submissions" on property_submissions
   for insert to anon, authenticated with check (true);
+
+-- ===========================================================================
+-- Storage — "List Your Property" media uploads
+--
+-- Private bucket: owners can upload images / video / documents from the public
+-- form, but the files are NOT publicly readable. Review them in the Supabase
+-- dashboard or generate signed URLs with the service-role key. The DB row
+-- stores the object paths in image_paths / video_path / document_paths.
+-- ===========================================================================
+
+insert into storage.buckets (id, name, public)
+values ('property-submissions', 'property-submissions', false)
+on conflict (id) do nothing;
+
+-- Anonymous + authenticated visitors may only INSERT (upload) into this bucket.
+drop policy if exists "public upload property submissions" on storage.objects;
+create policy "public upload property submissions" on storage.objects
+  for insert to anon, authenticated
+  with check (bucket_id = 'property-submissions');
