@@ -73,6 +73,12 @@ Business identity, contact details and navigation. Edit here to change globally:
   `/projects` + `/projects/[slug]`, `/plots` + `/plots/[slug]`.
 - `/legal/[doc]` — privacy, terms, disclaimer.
 - Detail routes use `generateStaticParams` (SSG) from `lib/data.ts`.
+- `/admin` — gated leads dashboard (enquiries + property submissions), `/admin/login`.
+  Auth is Supabase Auth; only `ADMIN_EMAIL` (default `admin@silazanzibar.com`)
+  is allowed. Gated by `proxy.ts` (Next 16 middleware) + `lib/supabase/session.ts`.
+  `noindex` + robots-disallowed; public header/footer hidden via `ChromeGate`.
+  Create/reset the admin user with `npm run admin:create` (reads `ADMIN_PASSWORD`
+  from `.env.local`; the password is never committed).
 
 ### Components
 - `components/layout/` — `Header`, `Footer`, `PageHero`.

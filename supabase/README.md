@@ -9,10 +9,21 @@ are persisted — no code changes required.
 
 1. **Create a Supabase project** at https://supabase.com.
 
-2. **Create the schema.** In the Supabase dashboard → SQL Editor, paste and run
-   the contents of [`supabase/schema.sql`](./schema.sql). This creates the
-   `properties`, `projects`, `plots`, `team_members`, `enquiries` and
-   `property_submissions` tables with Row Level Security.
+2. **Create the schema.** Two options — either works:
+
+   - **Supabase CLI (recommended)** — the schema is also a migration in
+     [`supabase/migrations/`](./migrations). Push it to your project:
+     ```bash
+     supabase login                       # opens browser, or: SUPABASE_ACCESS_TOKEN=sbp_... 
+     supabase link --project-ref <ref>    # <ref> = the xxxx in xxxx.supabase.co
+     supabase db push                     # applies supabase/migrations/*.sql
+     ```
+   - **SQL Editor** — in the Supabase dashboard → SQL Editor, paste and run the
+     contents of [`supabase/schema.sql`](./schema.sql).
+
+   Either way this creates the `properties`, `projects`, `plots`,
+   `team_members`, `enquiries` and `property_submissions` tables with Row Level
+   Security. (`schema.sql` and the migration are kept identical.)
 
 3. **Add credentials.** Copy `.env.example` → `.env.local` and fill in:
    - `NEXT_PUBLIC_SUPABASE_URL`
@@ -29,9 +40,34 @@ are persisted — no code changes required.
    This upserts every property / project / plot and replaces the team list from
    `lib/data.ts`. Safe to re-run.
 
-5. **Done.** Restart `npm run dev` (or redeploy). The site now reads from
+5. **Create the admin login.** The `/admin` dashboard (see below) authenticates
+   through Supabase Auth. Add `ADMIN_PASSWORD` to `.env.local`, then:
+   ```bash
+   npm run admin:create
+   ```
+   This creates (or resets the password of) the `admin@silazanzibar.com` user in
+   Supabase Auth. The password lives only in Supabase — it is never committed.
+   To disable public sign-ups, in the dashboard set Authentication → Providers →
+   Email → "Allow new users to sign up" **off**.
+
+6. **Done.** Restart `npm run dev` (or redeploy). The site now reads from
    Supabase; edit rows in the Supabase Table Editor and changes appear within
    the ISR window (~5 min) or on the next deploy.
+
+## Admin dashboard (`/admin`)
+
+- Sign in at **`/admin/login`** with `admin@silazanzibar.com` and the password
+  set via `npm run admin:create`. Only `ADMIN_EMAIL` (default
+  `admin@silazanzibar.com`) is allowed in — every other authenticated user is
+  rejected.
+- The dashboard lists **enquiries** and **List Your Property submissions**, with
+  1-hour signed download links for uploaded files. Reads use the service-role
+  key on the server, so the lead tables stay private (never exposed to the
+  browser or public API).
+- Auth is enforced by `proxy.ts` (Next.js 16 middleware) plus a re-check in the
+  page. The area is `noindex` and blocked in `robots.txt`.
+- **Vercel env vars:** set `ADMIN_EMAIL` (optional) in the project. Do **not**
+  set `ADMIN_PASSWORD` in Vercel — it's only used locally by `admin:create`.
 
 ## How it fits together
 
@@ -40,10 +76,14 @@ are persisted — no code changes required.
 | Env + config flags | `lib/supabase/env.ts`                            |
 | Read/insert client | `lib/supabase/server.ts` (anon, RLS-guarded)     |
 | Privileged client  | `lib/supabase/admin.ts` (service role, server)   |
+| Auth (admin) client| `lib/supabase/auth-server.ts` (cookie session)   |
 | Content getters    | `lib/content.ts` (Supabase → static fallback)    |
 | Form persistence   | `app/actions/leads.ts` (server actions)          |
-| Schema             | `supabase/schema.sql`                            |
+| Admin gate         | `proxy.ts` + `lib/supabase/session.ts`           |
+| Admin dashboard    | `app/admin/*`                                    |
+| Schema             | `supabase/schema.sql` + `supabase/migrations/`   |
 | Seed               | `scripts/seed.ts` (`npm run db:seed`)            |
+| Admin user         | `scripts/create-admin.ts` (`npm run admin:create`)|
 
 ## Security model (RLS)
 

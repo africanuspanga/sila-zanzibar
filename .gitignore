@@ -35,3 +35,5 @@ next-env.d.ts
 # editor
 .idea
 .vscode
+.env*
+!.env.example

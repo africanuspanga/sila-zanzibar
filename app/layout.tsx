@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFab } from "@/components/ui/WhatsAppFab";
+import { ChromeGate } from "@/components/layout/ChromeGate";
 import { site } from "@/lib/site";
 
 const fraunces = Fraunces({
@@ -125,10 +126,14 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <Header />
+        <ChromeGate>
+          <Header />
+        </ChromeGate>
         <main>{children}</main>
-        <Footer />
-        <WhatsAppFab />
+        <ChromeGate>
+          <Footer />
+          <WhatsAppFab />
+        </ChromeGate>
       </body>
     </html>
   );
