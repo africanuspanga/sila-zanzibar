@@ -21,3 +21,6 @@ export function getSupabaseBrowserClient(): SupabaseClient | null {
 }
 
 export const PROPERTY_SUBMISSIONS_BUCKET = "property-submissions";
+
+// Public bucket for admin-managed listing photos (properties/projects/plots).
+export const LISTING_IMAGES_BUCKET = "listing-images";

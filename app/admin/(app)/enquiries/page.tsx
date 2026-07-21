@@ -1,9 +1,18 @@
 import Link from "next/link";
+import { Download } from "lucide-react";
 import { fetchLeads, groupCount, sourceLabel, fmtDate, type Enquiry } from "@/lib/admin/data";
-import { PageHeader, Panel, Avatar, StatusBadge, Chip, EmptyState } from "@/components/admin/ui";
+import { PageHeader, Panel, Avatar, Chip, EmptyState } from "@/components/admin/ui";
+import { StatusSelect } from "@/components/admin/StatusSelect";
+import { updateEnquiryStatus } from "../leads-actions";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+const STATUS_OPTIONS = [
+  { value: "new", label: "New" },
+  { value: "contacted", label: "Contacted" },
+  { value: "closed", label: "Closed" },
+];
 
 const FILTERS = [
   { key: "all", label: "All" },
@@ -28,7 +37,17 @@ export default async function EnquiriesPage({
 
   return (
     <div>
-      <PageHeader title="Enquiries" subtitle={`${enquiries.length} total lead${enquiries.length === 1 ? "" : "s"} from contact and enquiry forms`} />
+      <PageHeader
+        title="Enquiries"
+        subtitle={`${enquiries.length} total lead${enquiries.length === 1 ? "" : "s"} from contact and enquiry forms`}
+        actions={
+          enquiries.length > 0 ? (
+            <a href="/admin/enquiries/export" className="btn-outline inline-flex items-center gap-1.5 text-sm">
+              <Download className="h-4 w-4" /> Export CSV
+            </a>
+          ) : null
+        }
+      />
 
       {error ? (
         <div className="mb-6 rounded-xl border border-crimson-200 bg-crimson-50 px-4 py-3 text-sm text-crimson-800">
@@ -101,7 +120,9 @@ export default async function EnquiriesPage({
                       {!e.context && !e.message && !e.service && !e.location && !e.budget ? <span className="text-muted">—</span> : null}
                     </td>
                     <td className="hidden py-3.5 pr-3 text-muted sm:table-cell">{fmtDate(e.created_at)}</td>
-                    <td className="py-3.5"><StatusBadge status={e.status} /></td>
+                    <td className="py-3.5">
+                      <StatusSelect id={e.id} current={e.status ?? "new"} options={STATUS_OPTIONS} action={updateEnquiryStatus} />
+                    </td>
                   </tr>
                 ))}
               </tbody>

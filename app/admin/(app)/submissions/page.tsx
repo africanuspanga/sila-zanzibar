@@ -1,9 +1,17 @@
 import { Paperclip, MapPin } from "lucide-react";
 import { fetchLeads, signFiles, submissionPaths, fmtDate } from "@/lib/admin/data";
-import { PageHeader, Panel, Avatar, StatusBadge, EmptyState } from "@/components/admin/ui";
+import { PageHeader, Panel, Avatar, EmptyState } from "@/components/admin/ui";
+import { StatusSelect } from "@/components/admin/StatusSelect";
+import { updateSubmissionStatus } from "../leads-actions";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+const STATUS_OPTIONS = [
+  { value: "pending_review", label: "Pending review" },
+  { value: "approved", label: "Approved" },
+  { value: "rejected", label: "Rejected" },
+];
 
 function Field({ label, value }: { label: string; value?: string | null }) {
   if (!value) return null;
@@ -53,7 +61,7 @@ export default async function SubmissionsPage() {
                     </p>
                   </div>
                 </div>
-                <StatusBadge status={s.status} />
+                <StatusSelect id={s.id} current={s.status ?? "pending_review"} options={STATUS_OPTIONS} action={updateSubmissionStatus} />
               </div>
 
               <dl className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3 lg:grid-cols-4">
