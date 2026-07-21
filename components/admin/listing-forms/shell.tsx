@@ -12,11 +12,19 @@ export function Section({ title, children, full = false }: { title: string; chil
   );
 }
 
-export function SaveBar({ saving, editing }: { saving: boolean; editing: boolean }) {
+export function SaveBar({
+  saving,
+  editing,
+  cancelHref = "/admin/listings",
+}: {
+  saving: boolean;
+  editing: boolean;
+  cancelHref?: string;
+}) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-20 border-t border-sand-300 bg-white/95 backdrop-blur lg:pl-64">
       <div className="mx-auto flex max-w-[1200px] items-center justify-end gap-3 px-4 py-3 sm:px-8">
-        <Link href="/admin/listings" className="btn-outline text-sm">
+        <Link href={cancelHref} className="btn-outline text-sm">
           Cancel
         </Link>
         <button type="submit" disabled={saving} className="btn-red text-sm disabled:opacity-60">

@@ -7,6 +7,7 @@ import {
   Inbox,
   FileText,
   Building2,
+  Users,
   LogOut,
   ExternalLink,
 } from "lucide-react";
@@ -17,6 +18,7 @@ const NAV = [
   { href: "/admin/enquiries", label: "Enquiries", icon: Inbox },
   { href: "/admin/submissions", label: "Submissions", icon: FileText },
   { href: "/admin/listings", label: "Listings", icon: Building2 },
+  { href: "/admin/team", label: "Team", icon: Users },
 ];
 
 export function Sidebar({ email }: { email: string }) {
